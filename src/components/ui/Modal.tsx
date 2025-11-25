@@ -38,7 +38,9 @@ export function Modal({
             className
           )}
         >
-          <View
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {}}
             className={cn(
               'bg-white rounded-t-3xl',
               variant === 'center' && 'rounded-3xl',
@@ -61,7 +63,7 @@ export function Modal({
               </View>
             )}
             {children}
-          </View>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </RNModal>

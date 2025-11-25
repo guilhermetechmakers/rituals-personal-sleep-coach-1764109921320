@@ -1,4 +1,6 @@
 // API utilities for Rituals app
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
 
 export interface ApiResponse<T> {
@@ -19,22 +21,35 @@ async function apiRequest<T>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
   
-  const config: RequestInit = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
   };
+
+  // Merge existing headers if provided
+  if (options.headers) {
+    if (options.headers instanceof Headers) {
+      options.headers.forEach((value, key) => {
+        headers[key] = value;
+      });
+    } else if (Array.isArray(options.headers)) {
+      options.headers.forEach(([key, value]) => {
+        headers[key] = value;
+      });
+    } else {
+      Object.assign(headers, options.headers);
+    }
+  }
 
   // Add auth token if available
   const token = await getAuthToken();
   if (token) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${token}`,
-    };
+    headers['Authorization'] = `Bearer ${token}`;
   }
+
+  const config: RequestInit = {
+    ...options,
+    headers,
+  };
 
   const response = await fetch(url, config);
 
@@ -47,13 +62,27 @@ async function apiRequest<T>(
     throw new Error(error.message || `API Error: ${response.status}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  
+  // Handle both wrapped { data: T } and direct T responses
+  // If response has 'data' property and no 'error' property, unwrap it
+  if (data && typeof data === 'object' && 'data' in data && data.data !== null && data.data !== undefined) {
+    // Check if it's an ApiResponse wrapper (has both data and error fields)
+    if ('error' in data && data.error === null) {
+      return data.data as T;
+    }
+    // Or if it's just a simple { data: T } wrapper
+    if (!('error' in data)) {
+      return data.data as T;
+    }
+  }
+  
+  return data as T;
 }
 
 // Auth token helpers (using AsyncStorage)
 async function getAuthToken(): Promise<string | null> {
   try {
-    const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
     return await AsyncStorage.getItem('auth_token');
   } catch {
     return null;
@@ -62,7 +91,6 @@ async function getAuthToken(): Promise<string | null> {
 
 async function clearAuthToken(): Promise<void> {
   try {
-    const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
     await AsyncStorage.removeItem('auth_token');
   } catch {
     // Ignore errors

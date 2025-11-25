@@ -4,11 +4,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { format } from 'date-fns';
+import type { JournalEntry } from '@/types';
+
+// Local type for display purposes (without required database fields)
+type JournalEntryDisplay = Pick<JournalEntry, 'id' | 'date' | 'type' | 'content'>;
 
 export default function JournalScreen() {
-  const [entries, setEntries] = useState([
-    { id: '1', date: new Date(), type: 'pre-sleep', content: 'Feeling calm and ready for sleep...' },
-    { id: '2', date: new Date(Date.now() - 86400000), type: 'morning', content: 'Slept well, feeling refreshed' },
+  const [entries, setEntries] = useState<JournalEntryDisplay[]>([
+    { id: '1', date: new Date().toISOString(), type: 'pre-sleep', content: 'Feeling calm and ready for sleep...' },
+    { id: '2', date: new Date(Date.now() - 86400000).toISOString(), type: 'morning', content: 'Slept well, feeling refreshed' },
   ]);
 
   return (
@@ -63,7 +67,7 @@ export default function JournalScreen() {
   );
 }
 
-function JournalEntryCard({ entry }: { entry: any }) {
+function JournalEntryCard({ entry }: { entry: JournalEntryDisplay }) {
   return (
     <Card className="mb-4">
       <View className="flex-row items-start justify-between mb-2">
@@ -72,7 +76,7 @@ function JournalEntryCard({ entry }: { entry: any }) {
             {entry.type === 'pre-sleep' ? 'Pre-Sleep' : 'Morning'} Entry
           </Text>
           <Text className="text-small text-neutral-dark opacity-60">
-            {format(entry.date, 'MMM d, yyyy • h:mm a')}
+            {format(new Date(entry.date), 'MMM d, yyyy • h:mm a')}
           </Text>
         </View>
         <View className={`px-2 py-1 rounded ${

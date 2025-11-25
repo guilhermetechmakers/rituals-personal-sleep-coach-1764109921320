@@ -131,30 +131,68 @@ export interface Subscription {
 
 export interface OnboardingAnswers {
   sleep_schedule?: {
-    bedtime?: string;
-    wake_time?: string;
+    bedtime?: string; // HH:mm format
+    wake_time?: string; // HH:mm format
     timezone?: string;
+    sleep_latency?: number; // minutes
   };
-  caffeine?: {
-    daily_intake?: number;
-    last_cup_time?: string;
-  };
-  naps?: {
-    takes_naps?: boolean;
-    nap_duration?: number;
+  habits?: {
+    caffeine?: {
+      daily_intake?: number; // cups
+      last_cup_time?: string; // HH:mm format
+    };
+    alcohol?: {
+      consumes_alcohol?: boolean;
+      weekly_consumption?: number; // drinks per week
+      last_drink_time?: string; // HH:mm format (on days consumed)
+    };
+    naps?: {
+      takes_naps?: boolean;
+      nap_frequency?: 'daily' | 'few_times_week' | 'rarely' | 'never';
+      nap_duration?: number; // minutes
+      nap_time?: string; // HH:mm format
+    };
   };
   medications?: {
     takes_sleep_meds?: boolean;
     medication_list?: string[];
+    other_medications?: string[]; // medications that might affect sleep
+  };
+  preferences?: {
+    audio_voice?: 'male' | 'female' | 'neutral';
+    audio_style?: 'calm' | 'energetic' | 'meditative';
+    light_sensitivity?: 'low' | 'medium' | 'high';
+    device_integration_opt_in?: boolean;
+    preferred_integrations?: ('apple_health' | 'google_fit' | 'oura' | 'fitbit' | 'garmin')[];
   };
   severity?: {
     sleep_latency_minutes?: number;
-    sleep_quality_rating?: number;
+    sleep_quality_rating?: number; // 1-10
+    awakenings_per_night?: number;
+    sleep_efficiency?: number; // percentage
   };
-  preferences?: {
-    audio_voice?: string;
-    light_sensitivity?: 'low' | 'medium' | 'high';
-    integrations_opt_in?: boolean;
+  safety_flags?: {
+    severe_insomnia?: boolean;
+    sleep_apnea_symptoms?: boolean;
+    restless_legs?: boolean;
+    narcolepsy_symptoms?: boolean;
+    other_concerns?: string;
   };
-  safety_flags?: string[];
+}
+
+export interface UserAssessment {
+  id: string;
+  user_id: string;
+  answers: OnboardingAnswers;
+  completed_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RitualPreview {
+  estimated_duration: number; // minutes
+  steps_count: number;
+  wind_down_time?: string; // HH:mm
+  in_bed_time?: string; // HH:mm
+  morning_time?: string; // HH:mm
 }

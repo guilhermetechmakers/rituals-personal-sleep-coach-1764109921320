@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { View, TouchableOpacity, ViewStyle } from 'react-native';
 import { cn } from '@/lib/utils';
 
 interface CardProps {
@@ -10,19 +10,31 @@ interface CardProps {
 }
 
 export function Card({ children, className, style, onPress }: CardProps) {
-  const TouchableComponent = onPress ? require('react-native').TouchableOpacity : View;
+  if (onPress) {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        className={cn(
+          'bg-white rounded-xl p-4 shadow-card',
+          className
+        )}
+        style={style}
+        activeOpacity={0.7}
+      >
+        {children}
+      </TouchableOpacity>
+    );
+  }
   
   return (
-    <TouchableComponent
-      onPress={onPress}
+    <View
       className={cn(
         'bg-white rounded-xl p-4 shadow-card',
         className
       )}
       style={style}
-      activeOpacity={onPress ? 0.7 : 1}
     >
       {children}
-    </TouchableComponent>
+    </View>
   );
 }
