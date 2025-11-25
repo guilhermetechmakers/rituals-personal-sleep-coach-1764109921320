@@ -18,7 +18,7 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Dashboard: undefined;
   Rituals: undefined;
-  Player: undefined;
+  Player: { sessionId?: string };
   Journal: undefined;
   Profile: undefined;
 };

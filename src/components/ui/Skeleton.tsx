@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { View, ViewStyle, DimensionValue } from 'react-native';
 import { cn } from '@/lib/utils';
 
 interface SkeletonProps {
-  width?: number | string;
-  height?: number | string;
+  width?: DimensionValue;
+  height?: DimensionValue;
   className?: string;
   style?: ViewStyle;
   rounded?: boolean;
