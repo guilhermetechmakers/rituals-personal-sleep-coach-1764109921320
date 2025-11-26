@@ -196,3 +196,75 @@ export interface RitualPreview {
   in_bed_time?: string; // HH:mm
   morning_time?: string; // HH:mm
 }
+
+// Re-export PaginatedResponse from api.ts for convenience
+export { type PaginatedResponse } from '@/lib/api';
+
+export interface Plan {
+  id: string;
+  name: string;
+  plan_type: 'free' | 'premium_monthly' | 'premium_annual';
+  price: number; // in cents
+  currency: string;
+  interval: 'month' | 'year';
+  features: string[];
+  trial_period_days?: number;
+  popular?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Transaction {
+  id: string;
+  user_id: string;
+  subscription_id?: string;
+  amount: number; // in cents
+  currency: string;
+  status: 'succeeded' | 'pending' | 'failed' | 'refunded';
+  type: 'subscription' | 'one-time' | 'refund';
+  description: string;
+  stripe_payment_intent_id?: string;
+  receipt_url?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PromoCode {
+  id: string;
+  code: string;
+  discount_type: 'percentage' | 'fixed_amount';
+  discount_value: number; // percentage (0-100) or amount in cents
+  currency?: string;
+  valid_from: string;
+  valid_until?: string;
+  usage_limit?: number;
+  usage_count: number;
+  applicable_plans?: ('premium_monthly' | 'premium_annual')[];
+  min_amount?: number; // minimum purchase amount in cents
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PaymentMethod {
+  id: string;
+  type: 'card';
+  card_brand?: string;
+  card_last4?: string;
+  card_exp_month?: number;
+  card_exp_year?: number;
+  is_default: boolean;
+  created_at: string;
+}
+
+export interface SubscriptionCheckout {
+  plan_id: string;
+  promo_code?: string;
+  payment_method_id?: string;
+  start_trial?: boolean;
+}
+
+export interface SubscriptionUpdate {
+  plan_id?: string;
+  promo_code?: string;
+  cancel_at_period_end?: boolean;
+}

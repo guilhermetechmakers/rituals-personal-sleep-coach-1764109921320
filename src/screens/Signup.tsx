@@ -26,7 +26,7 @@ export default function SignupScreen() {
   const navigation = useNavigation<NavigationProp>();
   const [loading, setLoading] = useState(false);
   
-  const { control, handleSubmit, formState: { errors }, watch } = useForm<SignupForm>({
+  const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       consent: false,
@@ -55,7 +55,7 @@ export default function SignupScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-        <ScrollView className="flex-1" contentContainerClassName="flex-grow">
+        <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
           <View className="flex-1 px-6 pt-12 pb-8 justify-center">
             <Text className="text-h1 text-neutral-dark font-semibold mb-2">
               Create Account
@@ -130,7 +130,7 @@ export default function SignupScreen() {
 
             <View className="mb-6">
               <TouchableOpacity
-                onPress={() => control._formValues.consent = !consent}
+                onPress={() => setValue('consent', !consent)}
                 className="flex-row items-start gap-3"
               >
                 <View className={`w-5 h-5 rounded border-2 items-center justify-center mt-0.5 ${

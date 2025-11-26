@@ -1,10 +1,22 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import type { CompositeNavigationProp } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import type { RootStackParamList, MainTabParamList } from '@/navigation/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
+type NavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList>,
+  StackNavigationProp<RootStackParamList>
+>;
+
 export default function ProfileScreen() {
+  const navigation = useNavigation<NavigationProp>();
+  
   // Mock user data
   const user = {
     name: 'John Doe',
@@ -85,8 +97,28 @@ export default function ProfileScreen() {
                 Upgrade for unlimited audio and integrations
               </Text>
             </View>
-            <Button variant="primary" onPress={() => {}}>
+            <Button 
+              variant="primary" 
+              onPress={() => {
+                const parent = navigation.getParent();
+                if (parent) {
+                  (parent as StackNavigationProp<RootStackParamList>).navigate('Pricing');
+                }
+              }}
+            >
               View Plans
+            </Button>
+            <Button 
+              variant="secondary" 
+              onPress={() => {
+                const parent = navigation.getParent();
+                if (parent) {
+                  (parent as StackNavigationProp<RootStackParamList>).navigate('SubscriptionManagement');
+                }
+              }}
+              className="mt-3"
+            >
+              Manage Subscription
             </Button>
           </Card>
 

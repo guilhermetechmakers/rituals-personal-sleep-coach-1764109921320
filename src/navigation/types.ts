@@ -4,6 +4,8 @@ export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;
   Onboarding: undefined;
+  Pricing: undefined;
+  SubscriptionManagement: undefined;
   NotFound: undefined;
 };
 
@@ -33,5 +35,6 @@ export type ProfileStackParamList = {
   Settings: undefined;
   SleepTracking: undefined;
   Pricing: undefined;
+  SubscriptionManagement: undefined;
   Help: undefined;
 };

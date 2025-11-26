@@ -114,6 +114,6 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),
-  delete: (endpoint: string) => 
-    apiRequest(endpoint, { method: 'DELETE' }),
+  delete: <T = void>(endpoint: string) => 
+    apiRequest<T>(endpoint, { method: 'DELETE' }),
 };

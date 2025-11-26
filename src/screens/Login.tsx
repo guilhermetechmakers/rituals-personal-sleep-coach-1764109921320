@@ -46,7 +46,7 @@ export default function LoginScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
-        <ScrollView className="flex-1" contentContainerClassName="flex-grow">
+        <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
           <View className="flex-1 px-6 pt-12 pb-8 justify-center">
             <Text className="text-h1 text-neutral-dark font-semibold mb-2">
               Welcome Back

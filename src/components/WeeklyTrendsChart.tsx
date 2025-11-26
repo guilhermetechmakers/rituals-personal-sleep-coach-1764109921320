@@ -32,11 +32,21 @@ export function WeeklyTrendsChart({ data, isLoading, metric }: WeeklyTrendsChart
     );
   }
 
-  const chartData = data.map((item, index) => ({
-    x: index + 1,
-    y: item[metric === 'latency' ? 'sleep_latency' : metric === 'duration' ? 'total_sleep_time' : 'sleep_quality'],
-    label: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-  }));
+  const chartData = data.map((item, index) => {
+    let yValue: number;
+    if (metric === 'latency') {
+      yValue = item.sleep_latency;
+    } else if (metric === 'duration') {
+      yValue = item.total_sleep_time;
+    } else {
+      yValue = item.sleep_quality;
+    }
+    return {
+      x: index + 1,
+      y: yValue,
+      label: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    };
+  });
 
   const yAxisLabel = {
     latency: 'Minutes',

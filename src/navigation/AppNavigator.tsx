@@ -17,6 +17,8 @@ import RitualBuilderScreen from '@/screens/RitualBuilder';
 import GuidedPlayerScreen from '@/screens/GuidedPlayer';
 import JournalScreen from '@/screens/Journal';
 import ProfileScreen from '@/screens/Profile';
+import PricingScreen from '@/screens/Pricing';
+import SubscriptionManagementScreen from '@/screens/SubscriptionManagement';
 import NotFoundScreen from '@/screens/NotFound';
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -130,6 +132,8 @@ export default function AppNavigator() {
           <>
             <RootStack.Screen name="Main" component={MainNavigator} />
             <RootStack.Screen name="Onboarding" component={OnboardingScreen} />
+            <RootStack.Screen name="Pricing" component={PricingScreen} />
+            <RootStack.Screen name="SubscriptionManagement" component={SubscriptionManagementScreen} />
           </>
         ) : (
           <RootStack.Screen name="Auth" component={AuthNavigator} />
